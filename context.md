@@ -1,4 +1,4 @@
-# Project context — HackerRank Orchestrate June 2026
+# Project context — ProofLens
 
 ## Challenge summary
 Visual damage claim verification. For each row in `dataset/claims.csv`, produce
@@ -8,8 +8,7 @@ or provide insufficient evidence for a reported damage claim.
 Object types: **car**, **laptop**, **package**
 
 ## Repo
-`interviewstreet/hackerrank-orchestrate-june26` (upstream)  
-Your fork / own remote: point `origin` at your own GitHub repo for PRs.
+`Pranavsingh431/ProofLens` (origin)
 
 ---
 
@@ -151,7 +150,7 @@ supporting_image_ids, valid_image, severity
 ## File structure
 
 ```
-hackerrank-orchestrate-june26/
+ProofLens/
 ├── context.md                     ← THIS FILE
 ├── output.csv                     ← final predictions
 ├── dataset/                       ← provided, read-only
@@ -160,7 +159,7 @@ hackerrank-orchestrate-june26/
 │   ├── user_history.csv           ✅ created skeleton, 40 rows
 │   ├── evidence_requirements.csv  ✅ created skeleton, 19 rows
 │   └── images/sample/ + images/test/  ✅ 111 placeholder image paths
-└── code/
+└── code/ 
     ├── main.py                    ← pipeline entry point
     ├── requirements.txt
     ├── .env.example
@@ -231,6 +230,8 @@ Phase 3 test suite: **10 tests** (vision struct, quality struct, parallelism, ev
 
 **Completed phases:** Phase 0 ✅, Phase 1 ✅, Phase 2 ✅
 **In progress:** Phase 3 (PR open: `phase/3-agents2-3-4-vision` → `main`)  
+**Completed phases:** Phase 0 ✅, Phase 1 ✅  
+**In progress:** Phase 2 ✅ (PR open: `phase/2-agent1-claim-parser` → `main`)  
 **Last evaluation metrics (sample set):**
 - claim_status accuracy: —
 - issue_type accuracy: —
