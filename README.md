@@ -249,6 +249,57 @@ The 14 required columns, in order:
 
 ---
 
+## UI — Pipeline Visualiser
+
+An interactive web UI that lets you browse all 44 claims and watch each agent process a claim in real time via Server-Sent Events.
+
+```
+ui/ (Next.js 16, Tailwind)  →  Vercel
+api/ (FastAPI, SSE)         →  Render
+```
+
+Each pipeline step emits a structured SSE event as it completes:
+
+```json
+{"type": "step_complete", "step": "claim_parser", "duration_ms": 1200,
+ "data": {"claimed_issue": "dent", "claimed_part": "rear_bumper", "path": "llm_fallback"}}
+```
+
+### Run locally
+
+**Backend (FastAPI)**
+
+```bash
+pip install -r code/requirements.txt -r api/requirements.txt
+# ensure OPENROUTER_API_KEY is in code/.env
+uvicorn api.main:app --reload --port 8000
+```
+
+**Frontend (Next.js)**
+
+```bash
+cd ui
+cp .env.local.example .env.local
+# set NEXT_PUBLIC_API_URL=http://localhost:8000
+npm install && npm run dev   # → http://localhost:3000
+```
+
+### Deploy to Render + Vercel
+
+**Render (backend)**
+1. Create a new Web Service, connect `Pranavsingh431/ProofLens`
+2. Render auto-detects `render.yaml` — no manual config needed
+3. Add `OPENROUTER_API_KEY` as a secret environment variable
+4. Note the service URL, e.g. `https://prooflens-api.onrender.com`
+
+**Vercel (frontend)**
+1. Import `Pranavsingh431/ProofLens` in the Vercel dashboard
+2. `vercel.json` sets `rootDirectory: ui` automatically
+3. Add env var `NEXT_PUBLIC_API_URL=https://prooflens-api.onrender.com`
+4. Deploy — Vercel builds and publishes automatically
+
+---
+
 ## Submission files
 
 | File | Description |
