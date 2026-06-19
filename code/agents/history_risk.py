@@ -11,19 +11,18 @@ class HistoryRiskAgent:
         if not row:
             return RiskAssessment(risk_flags=["none"])
 
-        flags = []
+        flags: set[str] = set()
         rejected = int(row.get("rejected_claim", 0) or 0)
         manual_review = int(row.get("manual_review_claim", 0) or 0)
         history_flags = str(row.get("history_flags", "")).strip()
 
-        if rejected >= 2:
-            flags.append("user_history_risk")
+        if rejected >= 2 or history_flags not in ("", "none", "nan", "None"):
+            flags.add("user_history_risk")
         if manual_review >= 1:
-            flags.append("manual_review_required")
-        if history_flags not in ("", "none", "nan", "None"):
-            flags.append("user_history_risk")
+            flags.add("manual_review_required")
 
+        flag_list = sorted(flags) if flags else ["none"]
         return RiskAssessment(
-            risk_flags=flags if flags else ["none"],
-            user_history_risk=bool(flags)
+            risk_flags=flag_list,
+            user_history_risk=bool(flags),
         )

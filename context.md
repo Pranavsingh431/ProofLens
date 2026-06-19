@@ -173,21 +173,22 @@ hackerrank-orchestrate-june26/
     │   ├── object_part_validator.py ← Agent 5b ✅ (deterministic)
     │   ├── history_risk.py        ← Agent 6 ✅ (deterministic)
     │   ├── decision_engine.py     ← Agent 7 ✅ (pure rules, zero LLM)
-    │   ├── audit_recovery.py      ← Agent 8 ✅ (7 rules, targeted re-run)
+    │   ├── audit_recovery.py      ← Agent 8 ✅ (7 named-function rules, targeted re-run)
     │   └── csv_formatter.py       ← Layer 5 (stub)
     ├── core/
-    │   ├── config.py              ✅ Phase 1: paths, models, allowed-value sets
+    │   ├── config.py              ✅ Phase 1: paths, models, allowed-value sets, EVIDENCE_COVERAGE_THRESHOLD
     │   ├── models.py              ✅ Phase 1: 10 Pydantic schemas + confidence fields
-    │   ├── loader.py              ✅ Phase 1: DataLoader, 4 CSVs, image path resolution
-    │   ├── signal_detector.py     ✅ Phase 1: regex-based injection/threat/language
-    │   ├── taxonomy.py            ✅ Phase 1: 78 issue + 40 part normalization mappings
-    │   ├── openrouter.py          ✅ Phase 2: API wrapper + retry (3× exponential backoff)
-    │   └── precheck.py            ← Phase 3: OpenCV pre-checks ✅
+    │   ├── loader.py              ✅ Phase 1: DataLoader, 4 CSVs, image path resolution, validate_image_paths
+    │   ├── signal_detector.py     ✅ Phase 1+fix: SignalDetector class, 9 injection patterns, 5 threat patterns, mixed-language detection
+    │   ├── taxonomy.py            ✅ Phase 1+fix: normalize_issue (substring fallback), normalize_part(raw, object_type) context-aware
+    │   ├── openrouter.py          ✅ Phase 2+fix: API wrapper + retry (3× exponential backoff), json_response flag for multimodal
+    │   └── precheck.py            ✅ Phase 3: OpenCV pre-checks (corrupt / too_small / extreme_blur)
     ├── tests/
     │   ├── test_core.py           ✅ Phase 1: 49 tests covering models, signals, taxonomy, loader
     │   ├── test_agent1.py         ✅ Phase 2: 6 tests (fast-path, LLM fallback, hi/es, injection, multi-part)
     │   ├── test_agents_3_4.py     ✅ Phase 3: 10 tests (vision, quality, evidence, precheck)
-    │   └── test_agents_5_6.py     ✅ Phase 4: 13 tests (fusion 8, validator 3, history risk 2)
+    │   ├── test_agents_5_6.py     ✅ Phase 4: 13 tests (fusion 8, validator 3, history risk 2)
+    │   └── test_agents_7_8.py     ✅ Phase 5: 6 tests (3 decision branches, 3 audit rules)
     └── evaluation/
         ├── main.py
         ├── metrics.py
@@ -229,12 +230,14 @@ Phase 4 test suite: **13 tests** (fusion 8, validator 3, history risk 2)
 
 Phase 5 test suite: **6 tests** (3 decision branches, 3 audit rules)
 
+**Total: 84 tests, all passing** (`PYTHONPATH=code python -m pytest code/tests/ -v`)
+
 ---
 
 ## Current status
 
-**Completed phases:** Phase 0 ✅, Phase 1 ✅, Phase 2 ✅, Phase 3 ✅, Phase 4 ✅
-**In progress:** Phase 5 (PR open: `phase/5-agents7-8-decision-audit` → `main`)
+**Completed phases:** Phase 0 ✅, Phase 1 ✅, Phase 2 ✅, Phase 3 ✅, Phase 4 ✅, Phase 5 ✅
+**In progress:** Phase 6 (full pipeline → output.csv)
 **Last evaluation metrics (sample set):**
 - claim_status accuracy: —
 - issue_type accuracy: —
@@ -294,3 +297,16 @@ Phase 5 test suite: **6 tests** (3 decision branches, 3 audit rules)
     A tiny deterministic agent after vision extraction catches impossible combinations  
     like `car + keyboard` and auto-corrects to `unknown`. Zero model calls, zero cost,  
     prevents all schema violations at the output layer.
+
+14. **`damage_consistent` checks claimed_issue matches detected type (not just internal consistency)**  
+    Original logic: True if ≤1 damage type detected. Bug: claim="dent", image shows "scratch" → consistent=True → wrongly "supported".  
+    Fixed: `consistent = (len(types)==1) AND (claimed_issue in types)`. Multiple types OR wrong type → False → "contradicted".
+
+15. **`normalize_part(raw, object_type)` is context-aware**  
+    "corner" → "corner" (laptop) vs "package_corner" (package). LLM sometimes returns "car_door" — stripped of object prefix and re-normalised.
+
+16. **`response_format=json_object` disabled for multimodal VLM calls**  
+    Gemini via OpenRouter may reject the parameter when the payload includes image data. Vision agents use `json_response=False`; text-only agents keep json mode.
+
+17. **GitHub default branch set to `main`**  
+    Phases 1–3 PRs merged into `phase/0-skeleton` (old default). Fixed by setting default branch via GitHub API. All 84 tests pass on `main`.

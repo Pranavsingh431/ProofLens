@@ -19,7 +19,14 @@ def fuse(findings: list[ImageFindings], quality: list[ImageQuality],
                      if canonical.claimed_part in f.visible_parts]
     damage_types = set(f.issue_detected for f in part_findings
                       if f.issue_detected is not None)
-    damage_consistent = len(damage_types) <= 1 if damage_types else True
+    # Consistent = only one damage type detected AND it matches the claimed issue
+    # (or no damage is detected yet, which is not a contradiction)
+    if not damage_types:
+        damage_consistent = True
+    elif len(damage_types) > 1:
+        damage_consistent = False
+    else:
+        damage_consistent = canonical.claimed_issue in damage_types
 
     total_valid = max(len(valid_findings), 1)
     coverage = len(part_findings) / total_valid

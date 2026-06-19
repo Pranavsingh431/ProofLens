@@ -4,6 +4,7 @@ import os
 from code.core.config import (
     CLAIMS_CSV, SAMPLE_CLAIMS_CSV,
     USER_HISTORY_CSV, EVIDENCE_REQUIREMENTS_CSV,
+    DATASET_DIR,
 )
 
 
@@ -34,3 +35,23 @@ class DataLoader:
             if row.get("object_type") == claim_object and row.get("issue_type") == claimed_issue:
                 return row
         return None
+
+    def validate_image_paths(self) -> list:
+        """Return list of image paths that cannot be found on disk.
+        Returns empty list if the images base directory does not exist."""
+        images_base = os.path.join(DATASET_DIR, "images")
+        if not os.path.isdir(images_base):
+            return []
+
+        missing = []
+        all_rows = list(self.claims) + list(self.sample_claims)
+        for row in all_rows:
+            raw = row.get("image_paths", "")
+            for path in raw.split(";"):
+                path = path.strip()
+                if not path:
+                    continue
+                full = os.path.join(DATASET_DIR, path)
+                if not os.path.exists(full):
+                    missing.append(full)
+        return missing
