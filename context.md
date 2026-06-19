@@ -172,8 +172,8 @@ hackerrank-orchestrate-june26/
     │   ├── cross_image_fusion.py  ← Agent 5 ✅ (deterministic fusion)
     │   ├── object_part_validator.py ← Agent 5b ✅ (deterministic)
     │   ├── history_risk.py        ← Agent 6 ✅ (deterministic)
-    │   ├── decision_engine.py     ← Agent 7 (stub)
-    │   ├── audit_recovery.py      ← Agent 8 (stub)
+    │   ├── decision_engine.py     ← Agent 7 ✅ (pure rules, zero LLM)
+    │   ├── audit_recovery.py      ← Agent 8 ✅ (7 rules, targeted re-run)
     │   └── csv_formatter.py       ← Layer 5 (stub)
     ├── core/
     │   ├── config.py              ✅ Phase 1: paths, models, allowed-value sets
@@ -227,12 +227,14 @@ Phase 2 test suite: **6 tests** (fast-path, LLM fallback, hi/es, injection, mult
 Phase 3 test suite: **10 tests** (vision struct, quality struct, parallelism, evidence lookup, 2x fuzzy fallback, 3x cost-aware routing, integration)
 Phase 4 test suite: **13 tests** (fusion 8, validator 3, history risk 2)
 
+Phase 5 test suite: **6 tests** (3 decision branches, 3 audit rules)
+
 ---
 
 ## Current status
 
-**Completed phases:** Phase 0 ✅, Phase 1 ✅, Phase 2 ✅, Phase 3 ✅
-**In progress:** Phase 4 (PR open: `phase/4-agent5-fusion-validator-risk` → `main`)
+**Completed phases:** Phase 0 ✅, Phase 1 ✅, Phase 2 ✅, Phase 3 ✅, Phase 4 ✅
+**In progress:** Phase 5 (PR open: `phase/5-agents7-8-decision-audit` → `main`)
 **Last evaluation metrics (sample set):**
 - claim_status accuracy: —
 - issue_type accuracy: —
