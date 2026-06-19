@@ -159,15 +159,15 @@ ProofLens/
 │   ├── user_history.csv           ✅ created skeleton, 40 rows
 │   ├── evidence_requirements.csv  ✅ created skeleton, 19 rows
 │   └── images/sample/ + images/test/  ✅ 111 placeholder image paths
-└── code/
+└── code/ 
     ├── main.py                    ← pipeline entry point
     ├── requirements.txt
     ├── .env.example
     ├── agents/
     │   ├── claim_parser.py        ← Agent 1 ✅ (hybrid: regex + LLM)
-    │   ├── evidence_requirement.py← Agent 2 (stub)
-    │   ├── vision_evidence.py     ← Agent 3 (stub)
-    │   ├── image_quality.py       ← Agent 4 (stub)
+    │   ├── evidence_requirement.py← Agent 2 ✅ (deterministic)
+    │   ├── vision_evidence.py     ← Agent 3 ✅ (VLM + confidence)
+    │   ├── image_quality.py       ← Agent 4 ✅ (VLM + OpenCV pre-check)
     │   ├── cross_image_fusion.py  ← Agent 5 (stub)
     │   ├── object_part_validator.py ← Agent 5b (stub)
     │   ├── history_risk.py        ← Agent 6 (stub)
@@ -181,10 +181,11 @@ ProofLens/
     │   ├── signal_detector.py     ✅ Phase 1: regex-based injection/threat/language
     │   ├── taxonomy.py            ✅ Phase 1: 78 issue + 40 part normalization mappings
     │   ├── openrouter.py          ✅ Phase 2: API wrapper + retry (3× exponential backoff)
-    │   └── precheck.py            ← Phase 3: OpenCV pre-checks
+    │   └── precheck.py            ← Phase 3: OpenCV pre-checks ✅
     ├── tests/
     │   ├── test_core.py           ✅ Phase 1: 49 tests covering models, signals, taxonomy, loader
-    │   └── test_agent1.py         ✅ Phase 2: 6 tests (fast-path, LLM fallback, hi/es, injection, multi-part)
+    │   ├── test_agent1.py         ✅ Phase 2: 6 tests (fast-path, LLM fallback, hi/es, injection, multi-part)
+    │   └── test_agents_3_4.py     ✅ Phase 3: 10 tests (vision, quality, evidence, precheck)
     └── evaluation/
         ├── main.py
         ├── metrics.py
@@ -221,11 +222,14 @@ Tests must pass before PR is opened.
 
 Phase 1 test suite: **49 tests, all passing**
 Phase 2 test suite: **6 tests** (fast-path, LLM fallback, hi/es, injection, multi-part)
+Phase 3 test suite: **10 tests** (vision struct, quality struct, parallelism, evidence lookup, 2x fuzzy fallback, 3x cost-aware routing, integration)
 
 ---
 
 ## Current status
 
+**Completed phases:** Phase 0 ✅, Phase 1 ✅, Phase 2 ✅
+**In progress:** Phase 3 (PR open: `phase/3-agents2-3-4-vision` → `main`)  
 **Completed phases:** Phase 0 ✅, Phase 1 ✅  
 **In progress:** Phase 2 ✅ (PR open: `phase/2-agent1-claim-parser` → `main`)  
 **Last evaluation metrics (sample set):**
