@@ -7,8 +7,13 @@ import traceback
 from typing import Optional
 
 import pandas as pd
+from dotenv import load_dotenv
 
-from code.core.config import DATASET_DIR
+# Load .env from code/ directory (where the .env file lives)
+_ENV_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), ".env")
+load_dotenv(_ENV_PATH)
+
+from code.core.config import DATASET_DIR, REPO_ROOT
 from code.core.loader import DataLoader
 from code.core.models import (
     ClaimCase, CanonicalClaim, EvidenceRequirement,
@@ -223,7 +228,7 @@ async def main():
             traceback.print_exc()
 
     df = pd.DataFrame(results, columns=CSVFormatter().columns)
-    output_path = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))), "output.csv")
+    output_path = os.path.join(REPO_ROOT, "output.csv")
     df.to_csv(output_path, index=False)
     print(f"\nWrote {len(df)} rows to {output_path}")
 

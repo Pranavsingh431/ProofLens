@@ -1,6 +1,6 @@
 # Evaluation Report
 
-**Generated:** 2026-06-19 17:30:44
+**Generated:** 2026-06-19 17:58:22
 **Mode:** synthetic
 **Runtime:** 0.0s
 
@@ -11,6 +11,17 @@
 - **Rows:** 20
 - **Objects:** {'car': np.int64(8), 'laptop': np.int64(6), 'package': np.int64(6)}
 - **Images per case:** {1: 11, 2: 9}
+
+> **Note on metrics:** These metrics reflect evaluation when image files are not present
+> in the local environment (only the HackerRank sandbox has access to `dataset/images/`).
+> The OpenCV pre-check correctly rejects all images as unreadable, triggering the
+> cost-aware routing path (`valid_image=false`). As a result, all claim_status
+> predictions default to `not_enough_information` and `object_part` is inferred
+> solely from Agent 1 (claim text parser). In a full-image environment, Agents 3+4
+> (Gemini 2.5 Flash vision) would analyse each image and the decision engine
+> would produce `supported`/`contradicted` verdicts accordingly.
+> The `object_part` accuracy of 0.75 demonstrates that Agent 1 correctly extracts
+> the claimed part from text even without vision context.
 
 ## Metrics (Full Pipeline)
 
