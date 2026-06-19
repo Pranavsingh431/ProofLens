@@ -2,29 +2,150 @@
 @tailwind components;
 @tailwind utilities;
 
+/* ── Design tokens ────────────────────────────────────────────────── */
 :root {
-  --foreground-rgb: 226, 232, 240;
-  --background-start-rgb: 15, 23, 42;
-  --background-end-rgb: 15, 23, 42;
+  color-scheme: dark;
+  --color-bg:        2   8  23;
+  --color-surface:  15  23  42;
+  --color-card:     30  41  59;
+  --color-border:   51  65  85;
+  --color-muted:   100 116 139;
+  --color-text:    226 232 240;
+  --color-accent:   59 130 246;
+  --color-cyan:     34 211 238;
+  --radius-card:   0.875rem;
 }
 
-body {
-  color: rgb(var(--foreground-rgb));
-  background: rgb(var(--background-start-rgb));
+/* ── Base reset ───────────────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; }
+
+html, body {
+  height: 100%;
+  margin: 0;
+  overflow: hidden;
+  background-color: rgb(var(--color-bg));
+  color: rgb(var(--color-text));
+  font-family: var(--font-inter, 'Inter', system-ui, sans-serif);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
-/* Custom scrollbar */
-::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
+/* ── Scrollbar ────────────────────────────────────────────────────── */
+::-webkit-scrollbar          { width: 4px; height: 4px; }
+::-webkit-scrollbar-track    { background: transparent; }
+::-webkit-scrollbar-thumb    { background: rgb(51 65 85); border-radius: 2px; }
+::-webkit-scrollbar-thumb:hover { background: rgb(71 85 105); }
+
+/* ── Keyframes ────────────────────────────────────────────────────── */
+@keyframes shimmer {
+  0%   { transform: translateX(-150%); }
+  100% { transform: translateX(150%); }
 }
-::-webkit-scrollbar-track {
-  background: #1e293b;
+
+@keyframes glow-pulse {
+  0%, 100% { box-shadow: 0 0 0   0 rgba(59,130,246,0.30), 0 0 12px 0 rgba(59,130,246,0.10); }
+  50%       { box-shadow: 0 0 0   0 rgba(59,130,246,0.10), 0 0 28px 4px rgba(59,130,246,0.20); }
 }
-::-webkit-scrollbar-thumb {
-  background: #475569;
-  border-radius: 3px;
+
+@keyframes status-ring {
+  0%        { transform: scale(1); opacity: 0.7; }
+  75%, 100% { transform: scale(2.2); opacity: 0; }
 }
-::-webkit-scrollbar-thumb:hover {
-  background: #64748b;
+
+@keyframes slide-up {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0);    }
+}
+
+@keyframes slide-right {
+  from { opacity: 0; transform: translateX(12px); }
+  to   { opacity: 1; transform: translateX(0);     }
+}
+
+@keyframes fade-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+@keyframes width-grow {
+  from { width: 0%; }
+  to   { width: 100%; }
+}
+
+/* ── Custom utility classes ───────────────────────────────────────── */
+
+/* Skeleton loader */
+.skeleton {
+  position: relative;
+  overflow: hidden;
+  background: rgb(30 41 59 / 0.5);
+  border-radius: 0.5rem;
+}
+.skeleton::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgb(51 65 85 / 0.5) 50%,
+    transparent 100%
+  );
+  animation: shimmer 1.6s ease-in-out infinite;
+}
+
+/* Glowing active indicator */
+.glow-active { animation: glow-pulse 2.4s ease-in-out infinite; }
+
+/* Status ring ping */
+.status-ring::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 9999px;
+  animation: status-ring 1.4s cubic-bezier(0,0,0.2,1) infinite;
+  background: currentColor;
+  opacity: 0.4;
+}
+
+/* Animation utilities */
+.animate-slide-up    { animation: slide-up    0.25s ease-out forwards; }
+.animate-slide-right { animation: slide-right 0.30s ease-out forwards; }
+.animate-fade-in     { animation: fade-in     0.25s ease-out forwards; }
+
+/* Glass card */
+.glass-card {
+  background: rgb(30 41 59 / 0.55);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgb(51 65 85 / 0.6);
+  border-radius: var(--radius-card);
+}
+
+/* Gradient text */
+.gradient-text {
+  background: linear-gradient(135deg, #60a5fa 0%, #22d3ee 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Accent border that glows */
+.accent-border {
+  border-color: rgb(59 130 246 / 0.4);
+  box-shadow: 0 0 0 1px rgb(59 130 246 / 0.1), inset 0 0 0 1px rgb(59 130 246 / 0.05);
+}
+
+/* Step connector line */
+.connector-line {
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(90deg, rgb(51 65 85) 0%, rgb(51 65 85) 100%);
+  transition: background 0.3s ease;
+}
+.connector-line.active {
+  background: linear-gradient(90deg, rgb(59 130 246) 0%, rgb(34 211 238) 100%);
+}
+.connector-line.complete {
+  background: linear-gradient(90deg, rgb(16 185 129) 0%, rgb(52 211 153) 100%);
 }
