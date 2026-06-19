@@ -1,0 +1,19 @@
+object_type,issue_type,minimum_image_evidence,applies_to
+car,dent,Claimed part visible with dent evidence,dent
+car,scratch,Claimed part visible with scratch evidence,scratch
+car,crack,Claimed part visible with crack evidence,crack
+car,glass_shatter,Claimed part visible with shattered glass evidence,glass_shatter
+car,broken_part,Claimed part visible with broken/displaced evidence,broken_part
+car,missing_part,Claimed part absent or removed,missing_part
+laptop,crack,Screen visible with crack evidence,crack
+laptop,scratch,Part visible with scratch evidence,scratch
+laptop,dent,Part visible with dent evidence,dent
+laptop,broken_part,Part visible with broken/displaced evidence,broken_part
+laptop,missing_part,Part absent or removed,missing_part
+laptop,stain,Part visible with stain evidence,stain
+package,crushed_packaging,Package visible with crushing evidence,crushed_packaging
+package,torn_packaging,Package visible with torn-open evidence,torn_packaging
+package,water_damage,Package visible with water damage evidence,water_damage
+package,missing_part,Contents absent or removed,missing_part
+package,stain,Package visible with stain evidence,stain
+package,none,Package intact with no visible damage,none

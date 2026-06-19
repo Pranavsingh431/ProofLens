@@ -165,23 +165,29 @@ hackerrank-orchestrate-june26/
     ├── requirements.txt
     ├── .env.example
     ├── agents/
-    │   ├── claim_parser.py        ← Agent 1
-    │   ├── evidence_requirement.py← Agent 2
-    │   ├── vision_evidence.py     ← Agent 3
-    │   ├── image_quality.py       ← Agent 4
-    │   ├── cross_image_fusion.py  ← Agent 5
-    │   ├── object_part_validator.py ← Agent 5b
-    │   ├── history_risk.py        ← Agent 6
-    │   ├── decision_engine.py     ← Agent 7 (pure rules)
-    │   ├── audit_recovery.py      ← Agent 8
-    │   └── csv_formatter.py       ← Layer 5
+    │   ├── claim_parser.py        ← Agent 1 ✅ (hybrid: regex + LLM)
+    │   ├── evidence_requirement.py← Agent 2 ✅ (deterministic)
+    │   ├── vision_evidence.py     ← Agent 3 ✅ (VLM + confidence)
+    │   ├── image_quality.py       ← Agent 4 ✅ (VLM + OpenCV pre-check)
+    │   ├── cross_image_fusion.py  ← Agent 5 ✅ (deterministic fusion)
+    │   ├── object_part_validator.py ← Agent 5b ✅ (deterministic)
+    │   ├── history_risk.py        ← Agent 6 ✅ (deterministic)
+    │   ├── decision_engine.py     ← Agent 7 (stub)
+    │   ├── audit_recovery.py      ← Agent 8 (stub)
+    │   └── csv_formatter.py       ← Layer 5 (stub)
     ├── core/
-    │   ├── config.py
-    │   ├── models.py              ← all Pydantic schemas
-    │   ├── loader.py
-    │   ├── signal_detector.py     ← Layer 1 signal detection
-    │   ├── taxonomy.py            ← Layer 1 normalizer
-    │   └── openrouter.py          ← API wrapper + retry
+    │   ├── config.py              ✅ Phase 1: paths, models, allowed-value sets
+    │   ├── models.py              ✅ Phase 1: 10 Pydantic schemas + confidence fields
+    │   ├── loader.py              ✅ Phase 1: DataLoader, 4 CSVs, image path resolution
+    │   ├── signal_detector.py     ✅ Phase 1: regex-based injection/threat/language
+    │   ├── taxonomy.py            ✅ Phase 1: 78 issue + 40 part normalization mappings
+    │   ├── openrouter.py          ✅ Phase 2: API wrapper + retry (3× exponential backoff)
+    │   └── precheck.py            ← Phase 3: OpenCV pre-checks ✅
+    ├── tests/
+    │   ├── test_core.py           ✅ Phase 1: 49 tests covering models, signals, taxonomy, loader
+    │   ├── test_agent1.py         ✅ Phase 2: 6 tests (fast-path, LLM fallback, hi/es, injection, multi-part)
+    │   ├── test_agents_3_4.py     ✅ Phase 3: 10 tests (vision, quality, evidence, precheck)
+    │   └── test_agents_5_6.py     ✅ Phase 4: 13 tests (fusion 8, validator 3, history risk 2)
     └── evaluation/
         ├── main.py
         ├── metrics.py
@@ -216,12 +222,17 @@ Run all: `pytest code/tests/ -v`
 Each phase adds tests in `code/tests/test_phase_N.py`.  
 Tests must pass before PR is opened.
 
+Phase 1 test suite: **49 tests, all passing**
+Phase 2 test suite: **6 tests** (fast-path, LLM fallback, hi/es, injection, multi-part)
+Phase 3 test suite: **10 tests** (vision struct, quality struct, parallelism, evidence lookup, 2x fuzzy fallback, 3x cost-aware routing, integration)
+Phase 4 test suite: **13 tests** (fusion 8, validator 3, history risk 2)
+
 ---
 
 ## Current status
 
-**Completed phases:** — (update this after each merge)  
-**In progress:** Phase 0  
+**Completed phases:** Phase 0 ✅, Phase 1 ✅, Phase 2 ✅, Phase 3 ✅
+**In progress:** Phase 4 (PR open: `phase/4-agent5-fusion-validator-risk` → `main`)
 **Last evaluation metrics (sample set):**
 - claim_status accuracy: —
 - issue_type accuracy: —
