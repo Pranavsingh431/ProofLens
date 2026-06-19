@@ -155,33 +155,36 @@ hackerrank-orchestrate-june26/
 ├── context.md                     ← THIS FILE
 ├── output.csv                     ← final predictions
 ├── dataset/                       ← provided, read-only
-│   ├── claims.csv
-│   ├── sample_claims.csv
-│   ├── user_history.csv
-│   ├── evidence_requirements.csv
-│   └── images/sample/ + images/test/
+│   ├── claims.csv                 ✅ loaded, 44 rows
+│   ├── sample_claims.csv          ✅ loaded, 20 rows
+│   ├── user_history.csv           ✅ created skeleton, 40 rows
+│   ├── evidence_requirements.csv  ✅ created skeleton, 19 rows
+│   └── images/sample/ + images/test/  ✅ 111 placeholder image paths
 └── code/
     ├── main.py                    ← pipeline entry point
     ├── requirements.txt
     ├── .env.example
     ├── agents/
-    │   ├── claim_parser.py        ← Agent 1
-    │   ├── evidence_requirement.py← Agent 2
-    │   ├── vision_evidence.py     ← Agent 3
-    │   ├── image_quality.py       ← Agent 4
-    │   ├── cross_image_fusion.py  ← Agent 5
-    │   ├── object_part_validator.py ← Agent 5b
-    │   ├── history_risk.py        ← Agent 6
-    │   ├── decision_engine.py     ← Agent 7 (pure rules)
-    │   ├── audit_recovery.py      ← Agent 8
-    │   └── csv_formatter.py       ← Layer 5
+    │   ├── claim_parser.py        ← Agent 1 (stub)
+    │   ├── evidence_requirement.py← Agent 2 (stub)
+    │   ├── vision_evidence.py     ← Agent 3 (stub)
+    │   ├── image_quality.py       ← Agent 4 (stub)
+    │   ├── cross_image_fusion.py  ← Agent 5 (stub)
+    │   ├── object_part_validator.py ← Agent 5b (stub)
+    │   ├── history_risk.py        ← Agent 6 (stub)
+    │   ├── decision_engine.py     ← Agent 7 (stub)
+    │   ├── audit_recovery.py      ← Agent 8 (stub)
+    │   └── csv_formatter.py       ← Layer 5 (stub)
     ├── core/
-    │   ├── config.py
-    │   ├── models.py              ← all Pydantic schemas
-    │   ├── loader.py
-    │   ├── signal_detector.py     ← Layer 1 signal detection
-    │   ├── taxonomy.py            ← Layer 1 normalizer
-    │   └── openrouter.py          ← API wrapper + retry
+    │   ├── config.py              ✅ Phase 1: paths, models, allowed-value sets
+    │   ├── models.py              ✅ Phase 1: 10 Pydantic schemas + confidence fields
+    │   ├── loader.py              ✅ Phase 1: DataLoader, 4 CSVs, image path resolution
+    │   ├── signal_detector.py     ✅ Phase 1: regex-based injection/threat/language
+    │   ├── taxonomy.py            ✅ Phase 1: 78 issue + 40 part normalization mappings
+    │   ├── openrouter.py          ← Phase 2: API wrapper + retry
+    │   └── precheck.py            ← Phase 3: OpenCV pre-checks
+    ├── tests/
+    │   └── test_core.py           ✅ Phase 1: 49 tests covering models, signals, taxonomy, loader
     └── evaluation/
         ├── main.py
         ├── metrics.py
@@ -213,15 +216,17 @@ Pattern: `git checkout main && git pull && git checkout -b phase/N-name`
 
 Run all: `pytest code/tests/ -v`
 
-Each phase adds tests in `code/tests/test_phase_N.py`.  
+Each phase adds tests in `code/tests/test_core.py`, `code/tests/test_agent1.py`, etc.  
 Tests must pass before PR is opened.
+
+Phase 1 test suite: **49 tests, all passing**
 
 ---
 
 ## Current status
 
-**Completed phases:** — (update this after each merge)  
-**In progress:** Phase 0  
+**Completed phases:** Phase 0 ✅  
+**In progress:** Phase 1 ✅ (PR open: `phase/1-core-models` → `main`)  
 **Last evaluation metrics (sample set):**
 - claim_status accuracy: —
 - issue_type accuracy: —
