@@ -164,7 +164,7 @@ ProofLens/
     ├── requirements.txt
     ├── .env.example
     ├── agents/
-    │   ├── claim_parser.py        ← Agent 1 (stub)
+    │   ├── claim_parser.py        ← Agent 1 ✅ (hybrid: regex + LLM)
     │   ├── evidence_requirement.py← Agent 2 (stub)
     │   ├── vision_evidence.py     ← Agent 3 (stub)
     │   ├── image_quality.py       ← Agent 4 (stub)
@@ -180,10 +180,11 @@ ProofLens/
     │   ├── loader.py              ✅ Phase 1: DataLoader, 4 CSVs, image path resolution
     │   ├── signal_detector.py     ✅ Phase 1: regex-based injection/threat/language
     │   ├── taxonomy.py            ✅ Phase 1: 78 issue + 40 part normalization mappings
-    │   ├── openrouter.py          ← Phase 2: API wrapper + retry
+    │   ├── openrouter.py          ✅ Phase 2: API wrapper + retry (3× exponential backoff)
     │   └── precheck.py            ← Phase 3: OpenCV pre-checks
     ├── tests/
-    │   └── test_core.py           ✅ Phase 1: 49 tests covering models, signals, taxonomy, loader
+    │   ├── test_core.py           ✅ Phase 1: 49 tests covering models, signals, taxonomy, loader
+    │   └── test_agent1.py         ✅ Phase 2: 6 tests (fast-path, LLM fallback, hi/es, injection, multi-part)
     └── evaluation/
         ├── main.py
         ├── metrics.py
@@ -219,13 +220,14 @@ Each phase adds tests in `code/tests/test_core.py`, `code/tests/test_agent1.py`,
 Tests must pass before PR is opened.
 
 Phase 1 test suite: **49 tests, all passing**
+Phase 2 test suite: **6 tests** (fast-path, LLM fallback, hi/es, injection, multi-part)
 
 ---
 
 ## Current status
 
-**Completed phases:** Phase 0 ✅  
-**In progress:** Phase 1 ✅ (PR open: `phase/1-core-models` → `main`)  
+**Completed phases:** Phase 0 ✅, Phase 1 ✅  
+**In progress:** Phase 2 ✅ (PR open: `phase/2-agent1-claim-parser` → `main`)  
 **Last evaluation metrics (sample set):**
 - claim_status accuracy: —
 - issue_type accuracy: —
