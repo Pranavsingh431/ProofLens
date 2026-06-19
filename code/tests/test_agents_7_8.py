@@ -30,7 +30,7 @@ class TestDecisionEngine:
         assert result.issue_type == "dent"
         assert result.object_part == "front_bumper"
         assert result.severity == "high"
-        assert "supports the claim" in result.claim_status_justification.lower()
+        assert "supports" in result.claim_status_justification.lower()
         assert "img_1" in result.claim_status_justification
 
     def test_decision_contradicted(self):

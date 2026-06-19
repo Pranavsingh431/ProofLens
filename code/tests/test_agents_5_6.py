@@ -130,7 +130,8 @@ class TestFusion:
         )
         result = fuse(findings, quality, canonical, evidence_req)
         assert result.evidence_coverage_score == 0.33
-        assert result.evidence_standard_met is False
+        # 33% >= 0.3 threshold → now meets evidence standard
+        assert result.evidence_standard_met is True
 
     def test_fusion_confidence_weighted(self):
         findings = [
