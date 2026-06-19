@@ -44,3 +44,5 @@ VALID_RISK_FLAGS = {
 }
 
 VALID_SEVERITY = {"none", "low", "medium", "high", "unknown"}
+
+EVIDENCE_COVERAGE_THRESHOLD = 0.5
