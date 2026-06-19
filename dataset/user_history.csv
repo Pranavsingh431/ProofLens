@@ -1,0 +1,14 @@
+user_id,total_claims,approved_claims,rejected_claim,manual_review_claim,history_flags
+user_034,5,1,2,1,fraud_flag
+user_005,3,2,1,0,none
+user_003,2,2,0,0,none
+user_007,1,1,0,0,none
+user_008,4,3,0,1,none
+user_011,2,1,1,0,none
+user_015,1,1,0,0,none
+user_018,2,0,1,1,none
+user_020,3,1,1,1,none
+user_030,1,1,0,0,none
+user_031,2,1,0,1,none
+user_032,1,0,0,1,none
+user_033,3,0,2,1,none
