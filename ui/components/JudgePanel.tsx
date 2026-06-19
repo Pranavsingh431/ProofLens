@@ -41,8 +41,8 @@ export default function JudgePanel({ loading }: { loading: boolean }) {
         <p className="text-[11px] font-semibold text-slate-500 uppercase tracking-widest px-1">
           Agent Pipeline
         </p>
-        {AGENTS.map((agent, i) => (
-          <AgentRow key={agent.id} agent={agent} index={i} />
+        {AGENTS.map((agent) => (
+          <AgentRow key={agent.id} agent={agent} />
         ))}
       </div>
 
@@ -115,7 +115,7 @@ const DECISIONS = [
   { icon: "🛡️", title: "Audit agent re-runs individual modules, not the full pipeline",    desc: "Targeted recovery — cheaper and faster than restarting all 10 components." },
 ];
 
-function AgentRow({ agent, index }: { agent: AgentDef; index: number }) {
+function AgentRow({ agent }: { agent: AgentDef }) {
   const tc = TYPE_CONFIG[agent.type];
   return (
     <div className="flex items-center gap-3 px-3 py-2.5 rounded-xl border border-slate-700/30

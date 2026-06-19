@@ -41,7 +41,7 @@ function NodeDot({ status, isActive }: { status: StepStatus; isActive: boolean }
   return <span className={`w-2 h-2 rounded-full ${colors[status]}`} />;
 }
 
-export default function PipelineArchViz({ stepStatuses, activeStepId, isRunning }: Props) {
+export default function PipelineArchViz({ stepStatuses, activeStepId }: Props) {
   return (
     <div className="shrink-0 border-b border-slate-800 bg-[rgb(2_8_23)/95] px-5 py-2.5">
       <div className="flex items-center gap-0">

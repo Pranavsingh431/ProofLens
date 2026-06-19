@@ -1,12 +1,5 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
 import "./globals.css";
-
-const inter = Inter({
-  subsets: ["latin"],
-  variable: "--font-inter",
-  display: "swap",
-});
 
 export const metadata: Metadata = {
   title: "ProofLens — Multi-Agent Visual Evidence Verification",
@@ -17,8 +10,8 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className={`dark ${inter.variable}`}>
-      <body className="bg-[rgb(2_8_23)] text-slate-100 antialiased overflow-hidden h-screen">
+    <html lang="en" className="dark">
+      <body className="h-screen overflow-hidden bg-[#0B1220] text-slate-100 antialiased">
         {children}
       </body>
     </html>

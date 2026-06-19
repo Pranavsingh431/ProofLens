@@ -16,10 +16,6 @@ const STATUS_STYLES: Record<string, { dot: string; text: string; ring: string; b
   error:    { dot: "bg-red-400",      text: "text-red-300",    ring: "ring-1 ring-red-500/30",    bg: "bg-red-500/5" },
 };
 
-const ICONS: Record<string, string> = {
-  "◌": "animate-spin", // running
-};
-
 function formatValue(v: unknown): string {
   if (v === null || v === undefined) return "—";
   if (Array.isArray(v)) return v.length === 0 ? "[]" : v.join(", ");

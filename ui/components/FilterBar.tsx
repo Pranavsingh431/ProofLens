@@ -13,101 +13,103 @@ interface Props {
 }
 
 const TYPES = [
-  { id: "all",     label: "All",      icon: "◈" },
-  { id: "car",     label: "Cars",     icon: "🚗" },
-  { id: "laptop",  label: "Laptops",  icon: "💻" },
-  { id: "package", label: "Packages", icon: "📦" },
+  { id: "all", label: "All" },
+  { id: "car", label: "Cars" },
+  { id: "laptop", label: "Laptops" },
+  { id: "package", label: "Packages" },
 ];
 
 const STATUSES = [
-  { id: "all",                    label: "Any status" },
-  { id: "supported",              label: "Supported" },
-  { id: "contradicted",           label: "Contradicted" },
-  { id: "not_enough_information", label: "Insufficient" },
+  { id: "all", label: "All" },
+  { id: "supported", label: "Supported" },
+  { id: "contradicted", label: "Contradicted" },
+  { id: "needs_review", label: "Needs Review" },
 ];
 
 export default function FilterBar({
-  filter, onFilterChange,
-  search, onSearchChange,
-  statusFilter, onStatusFilterChange,
+  filter,
+  onFilterChange,
+  search,
+  onSearchChange,
+  statusFilter,
+  onStatusFilterChange,
   claims,
 }: Props) {
-  const getCounts = (id: string) =>
-    id === "all" ? claims.length : claims.filter((c) => c.claim_object === id).length;
-
   return (
-    <div className="shrink-0 flex items-center gap-3 px-4 py-3 border-b border-slate-800 bg-[rgb(2_8_23)/80]">
-
-      {/* Object filter chips */}
-      <div className="flex items-center gap-1.5">
-        {TYPES.map((type) => {
-          const count = getCounts(type.id);
-          const active = filter === type.id;
-          return (
-            <button
-              key={type.id}
-              onClick={() => onFilterChange(type.id)}
-              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium
-                transition-all duration-200 border
-                ${active
-                  ? "bg-blue-500/15 border-blue-500/40 text-blue-300 shadow-sm shadow-blue-500/10"
-                  : "bg-slate-800/50 border-slate-700/50 text-slate-400 hover:border-slate-600 hover:text-slate-300"
-                }`}
-            >
-              <span>{type.icon}</span>
-              <span>{type.label}</span>
-              <span className={`text-[10px] px-1 rounded-full transition-colors
-                ${active ? "bg-blue-500/20 text-blue-400" : "bg-slate-700 text-slate-500"}`}>
-                {count}
-              </span>
-            </button>
-          );
-        })}
+    <div className="border-b border-slate-800/90 bg-[#0B1220]/95 p-5">
+      <div className="flex items-end justify-between gap-4">
+        <div>
+          <p className="text-xs font-semibold uppercase tracking-[0.18em] text-cyan-300/80">Claim Browser</p>
+          <h1 className="mt-2 text-2xl font-semibold tracking-tight text-white">Visual evidence queue</h1>
+        </div>
+        <div className="rounded-full border border-slate-700 bg-slate-900/70 px-3 py-1.5 text-xs font-medium text-slate-400">
+          {claims.length} claims
+        </div>
       </div>
 
-      {/* Separator */}
-      <div className="h-6 w-px bg-slate-800" />
-
-      {/* Search */}
-      <div className="relative flex-1 min-w-0 max-w-xs">
-        <span className="absolute left-2.5 top-1/2 -translate-y-1/2 text-slate-500 text-xs">⌕</span>
-        <input
-          type="text"
-          placeholder="Search user ID or claim…"
-          value={search}
-          onChange={(e) => onSearchChange(e.target.value)}
-          className="w-full bg-slate-800/60 border border-slate-700/60 rounded-lg
-            pl-7 pr-3 py-1.5 text-xs text-slate-200 placeholder-slate-600
-            focus:outline-none focus:border-blue-500/50 focus:bg-slate-800
-            transition-all"
-        />
+      <div className="mt-5">
+        <label className="relative block">
+          <span className="absolute left-4 top-1/2 -translate-y-1/2 text-sm text-slate-500">⌕</span>
+          <input
+            type="text"
+            placeholder="Search by user or claim..."
+            value={search}
+            onChange={(event) => onSearchChange(event.target.value)}
+            className="h-12 w-full rounded-2xl border border-slate-700/70 bg-[#111827] pl-10 pr-4 text-sm text-slate-100 outline-none transition placeholder:text-slate-600 focus:border-cyan-400/60 focus:ring-4 focus:ring-cyan-400/10"
+          />
+        </label>
       </div>
 
-      {/* Status filter */}
-      <select
-        value={statusFilter}
-        onChange={(e) => onStatusFilterChange(e.target.value)}
-        className="bg-slate-800/60 border border-slate-700/60 rounded-lg px-2.5 py-1.5
-          text-xs text-slate-300 focus:outline-none focus:border-blue-500/50
-          transition-all cursor-pointer"
-      >
-        {STATUSES.map((s) => (
-          <option key={s.id} value={s.id} className="bg-slate-900">
-            {s.label}
-          </option>
+      <div className="mt-4 flex flex-wrap gap-2">
+        {TYPES.map((type) => (
+          <Chip
+            key={type.id}
+            label={type.label}
+            active={filter === type.id}
+            onClick={() => onFilterChange(type.id)}
+          />
         ))}
-      </select>
+      </div>
 
-      {/* Spacer + count */}
-      <div className="ml-auto text-xs text-slate-600 shrink-0">
-        {claims.filter((c) => {
-          const matchType = filter === "all" || c.claim_object === filter;
-          const matchSearch = !search ||
-            c.user_id.toLowerCase().includes(search.toLowerCase()) ||
-            c.user_claim.toLowerCase().includes(search.toLowerCase());
-          return matchType && matchSearch;
-        }).length} / {claims.length}
+      <div className="mt-3 flex flex-wrap gap-2">
+        {STATUSES.map((status) => (
+          <Chip
+            key={status.id}
+            label={status.label}
+            active={statusFilter === status.id}
+            onClick={() => onStatusFilterChange(status.id)}
+            subtle
+          />
+        ))}
       </div>
     </div>
+  );
+}
+
+function Chip({
+  label,
+  active,
+  onClick,
+  subtle = false,
+}: {
+  label: string;
+  active: boolean;
+  onClick: () => void;
+  subtle?: boolean;
+}) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      className={`rounded-full border px-3.5 py-2 text-xs font-semibold transition ${
+        active
+          ? "border-cyan-400/40 bg-cyan-400/10 text-cyan-200 shadow-sm shadow-cyan-950/40"
+          : subtle
+            ? "border-slate-700/70 bg-slate-900/45 text-slate-400 hover:border-slate-500 hover:text-slate-200"
+            : "border-slate-700/70 bg-[#111827] text-slate-400 hover:border-slate-500 hover:text-slate-200"
+      }`}
+    >
+      {label}
+    </button>
   );
 }

@@ -1,11 +1,9 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
 
 /* ── Design tokens ────────────────────────────────────────────────── */
 :root {
   color-scheme: dark;
-  --color-bg:        2   8  23;
+  --color-bg:       11  18  32;
   --color-surface:  15  23  42;
   --color-card:     30  41  59;
   --color-border:   51  65  85;
