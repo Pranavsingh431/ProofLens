@@ -1,4 +1,4 @@
-# Project context — HackerRank Orchestrate June 2026
+# Project context — ProofLens
 
 ## Challenge summary
 Visual damage claim verification. For each row in `dataset/claims.csv`, produce
@@ -8,8 +8,7 @@ or provide insufficient evidence for a reported damage claim.
 Object types: **car**, **laptop**, **package**
 
 ## Repo
-`interviewstreet/hackerrank-orchestrate-june26` (upstream)  
-Your fork / own remote: point `origin` at your own GitHub repo for PRs.
+`Pranavsingh431/ProofLens` (origin)
 
 ---
 
@@ -151,7 +150,7 @@ supporting_image_ids, valid_image, severity
 ## File structure
 
 ```
-hackerrank-orchestrate-june26/
+ProofLens/
 ├── context.md                     ← THIS FILE
 ├── output.csv                     ← final predictions
 ├── dataset/                       ← provided, read-only
